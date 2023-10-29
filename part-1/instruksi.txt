@@ -1,2 +1,68 @@
-Instruksi:
-- jawab soal dan taruh solusi di folder ini!
+TASK DATA WAREHOUSE 
+
+PART 1.
+1. Sebutkan perbedaan antara data warehouse dan data lake
+Data Warehouse: kumpulan data terstruktur yang dikumpulkan dari berbagai sumber, dengan tujuan sudah jelas dan nantinya akan digunakan untuk analisis
+Data Lake: kumpulan data mentah yang sangat besar dari berbagai sumber, untuk tujuan penyimpanan, dan bisa jadi tujuan dari datanya belum jelas
+
+2. Apa yang membedakan teknologi database untuk data warehouse (OLAP) dari teknologi database konvensional (OLTP)?
+
+OLTP: dioptimalkan untuk pemrosesan transaksional
+OLAP: dioptimlakan untuk analisis data agregat.
+
+Data Warehouse digunakan untuk analisis data, seperti untuk menjawab pertanyaan bisnis tertentu, seperti "Destinasi apa yang paling banyak dikunjungi di 2023?" atau "Apa produk yang sering dicari oleh pelanggan?" OLTP digunakan untuk proses transaksi, seperti untuk membuat pesanan melakukan pembayaran atau memperbarui stok.
+
+Data Warehouse biasanya menggunakan data terstruktur, seperti tabel relasional. OLTP biasanya menggunakan data semi-terstruktur, atau tidak terstruktur.
+
+Data Warehouse biasanya lebih kompleks daripada OLTP. Data Warehouse memerlukan proses ETL untuk memindahkan data dari sumbernya ke data warehouse.
+
+3. Teknologi apa saja yang biasanya dipakai untuk data warehouse?
+
+1. AWS Redshift
+2. Google Big Query
+3. Clickhouse
+4. Snowflake
+5. Databricks
+6. Apache Dorris
+7. PostgreSQL (with Citus extension)
+8. etc
+
+4. Tuliskan setiap perintah dari proses instalasi citus menggunakan docker compose sampai tabel terbentuk. Berikan juga tangkapan layar untuk setiap langkah dan hasilnya!
+
+1. Copy code dari https://github.com/citusdata/docker/blob/master/docker-compose.yml
+2. Kemudian paste ke text editor
+3. Simpan dengan nama docker-compose.yml
+4. Buka docker
+5. Buka Windows PowerShell
+6. Masuk ke directory dimana docker-compose.yml disimpan
+7. Tuliskan perintah docker-compose -p citus up -d. Bisa diliat pada tangkapan layar dilampiran dengan nama foto1.png
+8. Connect ke citus, namun terlebih dahulu masuk ke bash dengan menjalankan perintah docker exec -it citus_master bash. Bisa diliat pada tangkapan layar dilampiran dengan nama foto2.png
+9. Setelah masuk ke bash connect ke PostgreSQL. Dengan menjalnkan perintah psql -U superuser -d postgres. Bisa diliat pada tangkapan layar dilampiran dengan nama foto3.png
+10. Setelah itu tambahkan extension dari CITUS. Dengan mengetikan query "create extension citus; pada Windows PowerShell. Bisa diliat pada tangkapan layar dilampiran dengan nama foto4.png
+11. Setelah itu create table, dengan query sbb:
+CREATE TABLE events_columnar (
+	device_id bigint,
+	event_id bigserial,
+	event_time timestamptz default now(),
+	data jsonb not null
+)
+USING columnar;
+Bisa diliat pada tangkapan layar dilampiran dengan nama foto5.png
+12. Kemudian isi data pada kolom tabel yang sudah dibuat sebelumnya, dengan memasukkan query sbb:
+INSERT INTO events_columnar (device_id, data)
+SELECT d, '{"hello":"columnar"}' from generate_series(1,100) d;
+Bisa diliat pada tangkapan layar dilampiran dengan nama foto6.png
+13. Setelah itu buat table duplikasi events_columnar, dengan nama events_row dengan query sbb:
+CREATE TABLE events_row AS SELECT * FROM events_columnar;
+Bisa diliat pada tangkapan layar dilampiran dengan nama foto7.png
+14. Cek table apa saja yang telah dibuat dengan query "\dt+"
+Bisa diliat pada tangkapan layar dilampiran dengan nama foto8.png
+
+
+5. Jelaskan perbedaan antara access method heap dan columnar pada citus!
+
+Keduanya merupakan metode penyimpanan data yang berbeda.
+
+Access Heap merupakan penyimpanan data tradisional yang menyimpan data dalam baris. Setiap baris dalam tabel mewakili satu record, dan setiap kolom dalam baris mewakili satu field alam record tersebut.
+
+Access Columnar merupakan metode penyimpanan data yang menyimpan data dalam kolom. Setiap kolom dalam tabel berisi nilai-nilai untuk field yang sama untuk semua record dalam tabel

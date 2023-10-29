@@ -1,2 +1,11 @@
-Instruksi:
-- jawab soal dan taruh solusi di folder ini!
+1. Buat sebuah bucket di GCS, upload beberapa file ke bucket tersebut.
+Hasilnya bisa dilihat pada lampiran foto1.png
+
+2. Hapus file yang sudah diupload
+Hasilnya bisa dilihat pada lampiran foto2.png
+
+3. Lakukan explorasi sample data wikipedia (https://console.cloud.google.com/bigquery?p=bigquery-public-data&d=samples&t=wikipedia&page=table)
+Hasilnya bisa dilihat pada lampiran eksplorasi1.png, eksplorasi2.png, dan eksplorasi3.png
+
+4. Munculkan jumlah kontribusi dari masing-masing contributor_ip, urutkan dari kontribusi terbesar ke kontribusi terkecil
+Hasilnya bisa dilihat pada lampiran foto3.png

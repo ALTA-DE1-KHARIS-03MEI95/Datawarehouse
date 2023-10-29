@@ -1,0 +1,21 @@
+TASK DATA WAREHOUSE PART 3
+
+1. Jelaskan perbedaan antara replication dan sharding!
+- Replication adalah proses membuat salinan datawarehouse ke beberapa server. Salinan-salinan ini dapat ditempatkan di lokasi yang berbeda untuk meningkatkan kinerja dan ketersediaan
+- Sharding adalah proses membagi datawarehouse menjadi beberapa bagian yang lebih kecil, yang disebut shard. Shard-shard ini kemudian dapat ditempatkan di server yang berbeda untuk menignkatkan kinerja dan skalabilitas
+
+2. Lakukan percobaan untuk membuat reference table + distributed table spt repo https://github.com/Immersive-DataEngineer-Resource/citus-demo
+Terlampir pada foto2.png
+
+
+3. Di node/worker mana saja product "Headphone" tersimpan? Tunjukan shard id nya?
+product "Headphones" tersimpan pada citus-demo_worker_1, citus-demo_worker_2, dan citus-demo_worker_3 dan shard idnya 102,009. Terlampir pada foto3.png
+
+4 Di node/worker mana saja order dengan id 13 tersimpan? Tunjukan shard idnya?
+order_id 13 shard idnya '102,033' pada citus-demo_worker_3. Terlampir pada foto4.png
+
+5 Kapan sebaiknya menggunakan replication?
+Replication dapat berguna ketika dimana data sangat penting dan harus tersedia setiap waktu, bahkan jika server rusak ataupun offline
+
+6. Kapan sebaiknya menggunakan sharding?
+Sharding dapat berguna ketika dimana memiliki kebutuhan data set yang besar dan operasi baca/tulis yang tinggi

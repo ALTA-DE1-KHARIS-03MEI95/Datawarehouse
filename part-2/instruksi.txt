@@ -1,2 +1,37 @@
-Instruksi:
-- jawab soal dan taruh solusi di folder ini!
+TASK PART 2 - Columnar Database
+1. Jalankan Citus di komputer lokal dengan menggunakan docker compose.
+Tuliskan perintah docker-compose -p citus up -d. Bukti terlampir pada file dengan nama foto1.png
+
+2. Tuliskan perintah untuk membuat:
+a. Tabel biasa
+CREATE TABLE events (
+	device_id bigint,
+	event_id bigserial,
+	event_time timestamptz default now(),
+	data jsonb not null
+);
+b. Tabel columnar
+CREATE TABLE events_columnar (
+	device_id bigint,
+	event_id bigserial,
+	event_time timestamptz default now(),
+	data jsonb not null
+)
+USING columnar;
+
+3. Masukkan 100 baris data ke dalam tabel biasa dan tabel columnar
+- Tabel biasa 
+INSERT INTO events (device_id, data)
+SELECT d, '{"hello":"columnar"}' from generate_series(1,100) d;
+- Tabel columnar, menambahkan data sekaligus membuat table columnar
+BEGIN;
+CREATE TABLE events_columnar (LIKE events) USING columnar;
+INSERT INTO events_columnar SELECT * FROM events;
+COMMIT;
+
+4. Tampilkan perbedaan ukuran antara tabel biasa dan tabel columnar!
+Terlampir pada file dengan nama foto2.png
+
+5. Tuliskan kesimpulan!
+PostgreSQL Citus merupakan extension dari PostgreSQL yang memungkinkan PostgreSQL mendistribusikan data dan query.
+Tabel biasa pada PostgreSQL citus dibuat sama seperti query pembuatan tabel, dan data dimasukkan dengan query seperti biasa. Namun untuk tabel columnar ada tambahan query "USING COLUMNAR". Tabel columnar juga menyimpan data secara kolom bukan baris. Jadi dapat meningkatkan kinerja query dan mengurangi ruang penyimpanan. 
